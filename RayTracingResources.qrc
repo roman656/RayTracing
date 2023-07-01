@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="start_icon.png">Resources/start_icon.png</file>
+        <file alias="save_icon.png">Resources/save_icon.png</file>
+    </qresource>
+</RCC>
