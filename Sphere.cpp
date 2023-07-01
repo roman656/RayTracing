@@ -2,18 +2,17 @@
 
 #include <QtMath>
 
-Sphere::Sphere(float radius, const QVector3D& centerPoint, const QVector3D& color) noexcept
+Sphere::Sphere(float radius, const QVector3D& centerPoint, const Material& material) noexcept
 {
     m_radius = radius;
     m_centerPoint = centerPoint;
-    m_color = color;
+    m_material = material;
 }
 
 
 
-QVariant Sphere::WasIntersected(const Ray& ray) const noexcept
+std::optional<float> Sphere::CalcIntersectionDistance(const Ray& ray) const noexcept
 {
-    QVariant distance;
     QVector3D rayDirection = ray.GetDirection();
     QVector3D fromOriginToCenter = m_centerPoint - ray.GetOriginPoint();
 
@@ -22,12 +21,12 @@ QVariant Sphere::WasIntersected(const Ray& ray) const noexcept
     float c = QVector3D::dotProduct(fromOriginToCenter, fromOriginToCenter) - m_radius * m_radius;
     float discriminant = b * b - 4 * a * c;
 
-    if (discriminant >= 0)
+    if (discriminant >= 0.0f)
     {
-        distance = QVariant((-b - qSqrt(discriminant)) / (2.0f * a));
+        return (-b - static_cast<float>(qSqrt(discriminant))) / (2.0f * a);
     }
 
-    return distance;
+    return std::nullopt;
 }
 
 
@@ -60,14 +59,14 @@ void Sphere::SetCenterPoint(const QVector3D& centerPoint) noexcept
 
 
 
-QVector3D Sphere::GetColor() const noexcept
+Material Sphere::GetMaterial() const noexcept
 {
-    return m_color;
+    return m_material;
 }
 
 
 
-void Sphere::SetColor(const QVector3D& color) noexcept
+void Sphere::SetMaterial(const Material& material) noexcept
 {
-    m_color = color;
+    m_material = material;
 }

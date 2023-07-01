@@ -1,16 +1,17 @@
 #ifndef SPHERE_HPP
 #define SPHERE_HPP
 
-#include <QVariant>
+#include <optional>
 
 #include "Ray.hpp"
+#include "Material.hpp"
 
 class Sphere final
 {
 public:
-    explicit Sphere(float radius, const QVector3D& centerPoint, const QVector3D& color) noexcept;
+    explicit Sphere(float radius, const QVector3D& centerPoint, const Material& material) noexcept;
 
-    QVariant WasIntersected(const Ray& ray) const noexcept;
+    std::optional<float> CalcIntersectionDistance(const Ray& ray) const noexcept;
 
     float GetRadius() const noexcept;
     void SetRadius(float radius) noexcept;
@@ -18,11 +19,11 @@ public:
     QVector3D GetCenterPoint() const noexcept;
     void SetCenterPoint(const QVector3D& centerPoint) noexcept;
 
-    QVector3D GetColor() const noexcept;
-    void SetColor(const QVector3D& color) noexcept;
+    Material GetMaterial() const noexcept;
+    void SetMaterial(const Material& material) noexcept;
 
 private:
-    QVector3D m_color;
+    Material m_material;
     QVector3D m_centerPoint;
     float m_radius;
 };

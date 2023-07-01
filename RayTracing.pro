@@ -5,6 +5,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 SOURCES += \
+    Material.cpp \
     Ray.cpp \
     Sphere.cpp \
     main.cpp \
@@ -13,6 +14,7 @@ SOURCES += \
 HEADERS += \
     Config.hpp \
     MainWindow.hpp \
+    Material.hpp \
     Ray.hpp \
     Sphere.hpp
 

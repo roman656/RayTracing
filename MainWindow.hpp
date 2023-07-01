@@ -25,16 +25,16 @@ private:
                                              qint32 width, qint32 height) noexcept;
 
     void RenderToFrameBuffer(QVector<QVector3D>& frameBuffer, qint32 width, qint32 height) const noexcept;
-    QVector3D CastRay(const Ray& ray, const Sphere& sphere) const noexcept;
+    QVector3D CastRay(const Ray& ray, const QVector<Sphere>& sceneObjects) const noexcept;
 
     QVector3D m_backgroundColor = QVector3D(128.0f, 128.0f, 128.0f);
-
     QVector<QVector3D> m_frameBuffer;
-
     QVector3D m_cameraPosition = QVector3D(0.0f, 0.0f, 0.0f);
-    float m_screenCameraDistance = 1.0f;
+    float m_screenCameraDistance = 1.0f;    // distanceToTheNearClipPlane
+    float m_distanceToTheFarClipPlane = 1000.0f;
     float m_fieldOfViewAngle = qDegreesToRadians(90.0f);
     float m_fps = 30.0f;
+    QVector<Sphere> m_sceneObjects;
 
     QTimer m_renderTimer;
     QImage m_image;

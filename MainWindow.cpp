@@ -55,6 +55,11 @@ MainWindow::MainWindow(QWidget* parent) noexcept : QMainWindow(parent)
         m_image.save(RESULT_IMAGES_DIRECTORY % QLatin1Char('/') % currentTime % RESULT_IMAGE_FILENAME);
     });
 
+    m_sceneObjects.append(Sphere(0.3f, QVector3D(0, 0, -1.5), Material(QVector3D(128, 200, 40))));
+    m_sceneObjects.append(Sphere(0.3f, QVector3D(1.0, 0, -1.5), Material(QVector3D(246, 56, 54))));
+    m_sceneObjects.append(Sphere(0.3f, QVector3D(-0.2, 0.3, -2.5), Material(QVector3D(231, 32, 146))));
+    m_sceneObjects.append(Sphere(0.3f, QVector3D(-1.0, 0, -3.5), Material(QVector3D(45, 235, 178))));
+
     QWidget* centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
 
@@ -114,8 +119,6 @@ void MainWindow::RenderToFrameBuffer(QVector<QVector3D>& frameBuffer, qint32 wid
     float screenHalfWidth = screenWidth * 0.5f;
     float screenAspectRatio = static_cast<float>(width) / static_cast<float>(height);
 
-    Sphere sphere(0.5f, QVector3D(0, 0, -1.5), QVector3D(128, 200, 40));
-
     for (qint32 rowIndex = 0; rowIndex < height; ++rowIndex)
     {
         for (qint32 columnIndex = 0; columnIndex < width; ++columnIndex)
@@ -130,21 +133,41 @@ void MainWindow::RenderToFrameBuffer(QVector<QVector3D>& frameBuffer, qint32 wid
             Ray ray(m_cameraPosition,
                     QVector3D(screenPixelX, screenPixelY, -m_screenCameraDistance + m_cameraPosition.z()));
 
-            frameBuffer[columnIndex + rowIndex * width] = CastRay(ray, sphere);
+            frameBuffer[columnIndex + rowIndex * width] = CastRay(ray, m_sceneObjects);
         }
     }
 }
 
 
 
-QVector3D MainWindow::CastRay(const Ray& ray, const Sphere& sphere) const noexcept
+QVector3D MainWindow::CastRay(const Ray& ray, const QVector<Sphere>& sceneObjects) const noexcept
 {
-    if (!sphere.WasIntersected(ray).isNull())
+    const qint32 sceneObjectsAmount = sceneObjects.size();
+    Material resultMaterial(m_backgroundColor);
+    QVector3D normal;
+    float minIntersectionDistance = -1;
+    bool wasAnyIntersection = false;
+
+    for (qint32 i = 0; i < sceneObjectsAmount; ++i)
     {
-        return sphere.GetColor();
+        std::optional<float> optionalDistance = sceneObjects[i].CalcIntersectionDistance(ray);
+
+        if (optionalDistance.has_value())
+        {
+            float distance = optionalDistance.value();
+
+            if (distance <= m_distanceToTheFarClipPlane)
+            {
+                if (!wasAnyIntersection || distance < minIntersectionDistance)
+                {
+                    wasAnyIntersection = true;
+                    minIntersectionDistance = distance;
+                    resultMaterial.SetDiffuseColor(sceneObjects[i].GetMaterial().GetDiffuseColor());
+                    normal = (ray.GetPointOnRay(distance) - sceneObjects[i].GetCenterPoint()).normalized();
+                }
+            }
+        }
     }
-    else
-    {
-        return m_backgroundColor;
-    }
+
+    return resultMaterial.GetDiffuseColor();
 }
