@@ -3,13 +3,15 @@
 
 #include <optional>
 
-#include "Ray.hpp"
-#include "Material.hpp"
+#include "Render/Ray.hpp"
+#include "Render/Material.hpp"
 
 class Sphere final
 {
 public:
-    explicit Sphere(float radius, const QVector3D& centerPoint, const Material& material) noexcept;
+    explicit Sphere(float radius = 1.0f,
+                    const QVector3D& centerPoint = QVector3D(),
+                    const Material& material = Material()) noexcept;
 
     std::optional<float> CalcIntersectionDistance(const Ray& ray) const noexcept;
 

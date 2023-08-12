@@ -5,18 +5,26 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 SOURCES += \
-    Material.cpp \
-    Ray.cpp \
-    Sphere.cpp \
+    Render/Camera.cpp \
+    Render/FrameBuffer.cpp \
+    Render/Material.cpp \
+    Render/Ray.cpp \
+    Render/Renderer.cpp \
+    Render/Scene.cpp \
+    Render/Sphere.cpp \
     main.cpp \
-    MainWindow.cpp
+    View/MainWindow.cpp
 
 HEADERS += \
     Config.hpp \
-    MainWindow.hpp \
-    Material.hpp \
-    Ray.hpp \
-    Sphere.hpp
+    Render/Camera.hpp \
+    Render/FrameBuffer.hpp \
+    Render/Renderer.hpp \
+    Render/Scene.hpp \
+    View/MainWindow.hpp \
+    Render/Material.hpp \
+    Render/Ray.hpp \
+    Render/Sphere.hpp
 
 RESOURCES += \
     RayTracingResources.qrc

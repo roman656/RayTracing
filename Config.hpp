@@ -2,6 +2,7 @@
 #define CONFIG_HPP
 
 #include <QString>
+#include <QVector3D>
 #include <QFont>
 
 const QString MAIN_WINDOW_TITLE(QStringLiteral("RayTracing"));
@@ -12,6 +13,7 @@ const qint32 DEFAULT_WINDOW_HEIGHT = 400;
 const qint32 DEFAULT_IMAGE_WIDTH = 300;
 const qint32 DEFAULT_IMAGE_HEIGHT = 300;
 const qint32 ICON_SIZE = 35;
-const QFont MAIN_FONT(QStringLiteral("Arial"), 16);
+const QFont MAIN_FONT(QStringLiteral("Roboto"), 16);
+const QVector3D DEFAULT_BACKGROUND_COLOR(128.0f, 128.0f, 128.0f);
 
 #endif // CONFIG_HPP
