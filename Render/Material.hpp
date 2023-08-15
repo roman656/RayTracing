@@ -6,8 +6,7 @@
 class Material final
 {
 public:
-    explicit Material() noexcept;
-    explicit Material(const QVector3D& diffuseColor) noexcept;
+    explicit Material(const QVector3D& diffuseColor = QVector3D()) noexcept;
 
     QVector3D GetDiffuseColor() const noexcept;
     void SetDiffuseColor(const QVector3D& diffuseColor) noexcept;

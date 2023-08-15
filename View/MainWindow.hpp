@@ -19,6 +19,7 @@ public:
 private:
     Q_DISABLE_COPY_MOVE(MainWindow)
 
+    void InitializeScene() noexcept;
     void SaveImage() const noexcept;
 
     FrameBuffer m_frameBuffer = FrameBuffer(DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT);

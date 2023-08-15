@@ -7,11 +7,6 @@ Material::Material(const QVector3D& diffuseColor) noexcept
 
 
 
-Material::Material() noexcept : Material(QVector3D())
-{}
-
-
-
 QVector3D Material::GetDiffuseColor() const noexcept
 {
     return m_diffuseColor;

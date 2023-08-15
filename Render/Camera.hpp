@@ -15,16 +15,16 @@ public:
     float GetFieldOfViewAngle() const noexcept;
     void SetFieldOfViewAngle(float fieldOfViewAngle) noexcept;
 
-    float GetScreenCameraDistance() const noexcept;
-    void SetScreenCameraDistance(float screenCameraDistance) noexcept;
+    float GetNearClipPlaneDistance() const noexcept;
+    void SetNearClipPlaneDistance(float nearClipPlaneDistance) noexcept;
 
-    float GetDistanceToTheFarClipPlane() const noexcept;
-    void SetDistanceToTheFarClipPlane(float distanceToTheFarClipPlane) noexcept;
+    float GetFarClipPlaneDistance() const noexcept;
+    void SetFarClipPlaneDistance(float farClipPlaneDistance) noexcept;
 
 private:
     QVector3D m_position;
-    float m_screenCameraDistance = 1.0f;    // distanceToTheNearClipPlane
-    float m_distanceToTheFarClipPlane = 1000.0f;
+    float m_nearClipPlaneDistance = 1.0f;
+    float m_farClipPlaneDistance = 1000.0f;
     float m_fieldOfViewAngle = qDegreesToRadians(90.0f);
 };
 

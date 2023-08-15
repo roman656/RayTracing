@@ -11,12 +11,7 @@
 
 MainWindow::MainWindow(QWidget* parent) noexcept : QMainWindow(parent)
 {
-    m_scene.SetBackgroundColor(DEFAULT_BACKGROUND_COLOR);
-    m_scene.SetCamera(Camera());
-    m_scene.AddSphere(Sphere(0.3f, QVector3D(0, 0, -1.5), Material(QVector3D(128, 200, 40))));
-    m_scene.AddSphere(Sphere(0.3f, QVector3D(1.0, 0, -1.5), Material(QVector3D(246, 56, 54))));
-    m_scene.AddSphere(Sphere(0.3f, QVector3D(-0.2, 0.3, -2.5), Material(QVector3D(231, 32, 146))));
-    m_scene.AddSphere(Sphere(0.3f, QVector3D(-1.0, 0, -3.5), Material(QVector3D(45, 235, 178))));
+    InitializeScene();
 
     m_startButton = new QPushButton(QStringLiteral(" Старт"), this);
     m_startButton->setIcon(QIcon(QStringLiteral(":/start_icon.png")));
@@ -30,6 +25,7 @@ MainWindow::MainWindow(QWidget* parent) noexcept : QMainWindow(parent)
     m_saveButton->setEnabled(false);
 
     m_imageLabel = new QLabel(this);
+    m_imageLabel->setPixmap(QPixmap(DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT));
 
     connect(m_saveButton, &QPushButton::clicked, this, &MainWindow::SaveImage);
     connect(m_startButton, &QPushButton::clicked, this, [this]
@@ -50,8 +46,8 @@ MainWindow::MainWindow(QWidget* parent) noexcept : QMainWindow(parent)
     mainLayout->addWidget(m_startButton);
     mainLayout->addWidget(m_saveButton);
 
-    QRect desktopRect = QApplication::desktop()->availableGeometry(this);
-    QPoint center = desktopRect.center();
+    const QRect desktopRect = QApplication::desktop()->availableGeometry(this);
+    const QPoint center = desktopRect.center();
 
     setGeometry(center.x() - DEFAULT_WINDOW_WIDTH * 0.5f,
                 center.y() - DEFAULT_WINDOW_HEIGHT * 0.5f,
@@ -62,9 +58,27 @@ MainWindow::MainWindow(QWidget* parent) noexcept : QMainWindow(parent)
 
 
 
+void MainWindow::InitializeScene() noexcept
+{
+    const float spheresSize = 0.3f;
+    const Material redMaterial(QVector3D(255, 0, 0));    // Временное именование для различения сфер на сцене.
+    const Material greenMaterial(QVector3D(0, 255, 0));
+    const Material blueMaterial(QVector3D(0, 0, 255));
+    const Material yellowMaterial(QVector3D(255, 255, 0));
+
+    /* Стандартной камеры пока достаточно, поэтому явно не устанавливается. */
+    m_scene.SetBackgroundColor(DEFAULT_BACKGROUND_COLOR);
+    m_scene.AddSphere(Sphere(spheresSize, QVector3D(0, 0, -1.5), redMaterial));
+    m_scene.AddSphere(Sphere(spheresSize, QVector3D(-0.2, 0.3, -1.5), greenMaterial));
+    m_scene.AddSphere(Sphere(spheresSize, QVector3D(-1.0, 0, -3.5), blueMaterial));
+    m_scene.AddSphere(Sphere(spheresSize, QVector3D(1.0, 0, -1.5), yellowMaterial));
+}
+
+
+
 void MainWindow::SaveImage() const noexcept
 {
-    QString currentTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyy_MM_dd_hh_mm_ss_z"));
+    const QString currentTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyy_MM_dd_hh_mm_ss_z"));
 
     if (!QDir(RESULT_IMAGES_DIRECTORY).exists())
     {

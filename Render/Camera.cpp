@@ -35,28 +35,28 @@ void Camera::SetFieldOfViewAngle(float fieldOfViewAngle) noexcept
 
 
 
-float Camera::GetScreenCameraDistance() const noexcept
+float Camera::GetNearClipPlaneDistance() const noexcept
 {
-    return m_screenCameraDistance;
+    return m_nearClipPlaneDistance;
 }
 
 
 
-void Camera::SetScreenCameraDistance(float screenCameraDistance) noexcept
+void Camera::SetNearClipPlaneDistance(float nearClipPlaneDistance) noexcept
 {
-    m_screenCameraDistance = screenCameraDistance;
+    m_nearClipPlaneDistance = nearClipPlaneDistance;
 }
 
 
 
-float Camera::GetDistanceToTheFarClipPlane() const noexcept
+float Camera::GetFarClipPlaneDistance() const noexcept
 {
-    return m_distanceToTheFarClipPlane;
+    return m_farClipPlaneDistance;
 }
 
 
 
-void Camera::SetDistanceToTheFarClipPlane(float distanceToTheFarClipPlane) noexcept
+void Camera::SetFarClipPlaneDistance(float farClipPlaneDistance) noexcept
 {
-    m_distanceToTheFarClipPlane = distanceToTheFarClipPlane;
+    m_farClipPlaneDistance = farClipPlaneDistance;
 }

@@ -13,20 +13,29 @@ Sphere::Sphere(float radius, const QVector3D& centerPoint, const Material& mater
 
 std::optional<float> Sphere::CalcIntersectionDistance(const Ray& ray) const noexcept
 {
-    QVector3D rayDirection = ray.GetDirection();
-    QVector3D fromOriginToCenter = m_centerPoint - ray.GetOriginPoint();
+    const QVector3D rayDirection = ray.GetDirection();
+    const QVector3D fromOriginToCenter = m_centerPoint - ray.GetOriginPoint();
 
-    float a = QVector3D::dotProduct(rayDirection, rayDirection);
-    float b = 2.0f * QVector3D::dotProduct(fromOriginToCenter, rayDirection);
-    float c = QVector3D::dotProduct(fromOriginToCenter, fromOriginToCenter) - m_radius * m_radius;
-    float discriminant = b * b - 4 * a * c;
+    const float a = QVector3D::dotProduct(rayDirection, rayDirection);
+    const float b = 2.0f * QVector3D::dotProduct(fromOriginToCenter, rayDirection);
+    const float c = QVector3D::dotProduct(fromOriginToCenter, fromOriginToCenter) - m_radius * m_radius;
+    const float discriminant = b * b - 4 * a * c;
 
-    if (discriminant >= 0.0f)
+    if (discriminant > 0.0f)
     {
-        return (-b - static_cast<float>(qSqrt(discriminant))) / (2.0f * a);
-    }
+        const float x1 = qAbs((-b + static_cast<float>(qSqrt(discriminant))) / (2.0f * a));
+        const float x2 = qAbs((-b - static_cast<float>(qSqrt(discriminant))) / (2.0f * a));
 
-    return std::nullopt;
+        return qMin(x1, x2);
+    }
+    else if (discriminant == 0.0f)
+    {
+        return qAbs(-b / (2.0f * a));
+    }
+    else
+    {
+        return std::nullopt;
+    }
 }
 
 
