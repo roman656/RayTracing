@@ -7,6 +7,7 @@ CONFIG += c++17
 SOURCES += \
     Render/Camera.cpp \
     Render/FrameBuffer.cpp \
+    Render/LightPoint.cpp \
     Render/Material.cpp \
     Render/Ray.cpp \
     Render/Renderer.cpp \
@@ -19,6 +20,7 @@ HEADERS += \
     Config.hpp \
     Render/Camera.hpp \
     Render/FrameBuffer.hpp \
+    Render/LightPoint.hpp \
     Render/Renderer.hpp \
     Render/Scene.hpp \
     View/MainWindow.hpp \

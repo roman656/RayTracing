@@ -5,6 +5,7 @@
 
 #include "Render/Sphere.hpp"
 #include "Render/Camera.hpp"
+#include "Render/LightPoint.hpp"
 
 class Scene final
 {
@@ -20,13 +21,19 @@ public:
 
     void AddSphere(const Sphere& sphere) noexcept;
 
+    void AddLightPoint(const LightPoint& lightPoint) noexcept;
+
     QVector<Sphere>& GetObjects() noexcept;
     const QVector<Sphere>& GetObjects() const noexcept;
+
+    QVector<LightPoint>& GetLightPoints() noexcept;
+    const QVector<LightPoint>& GetLightPoints() const noexcept;
 
 private:
     QVector3D m_backgroundColor;
     Camera m_camera;
     QVector<Sphere> m_objects;
+    QVector<LightPoint> m_lightPoints;
 };
 
 #endif // SCENE_HPP

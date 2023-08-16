@@ -28,6 +28,13 @@ void Scene::AddSphere(const Sphere& sphere) noexcept
 
 
 
+void Scene::AddLightPoint(const LightPoint& lightPoint) noexcept
+{
+    m_lightPoints.append(lightPoint);
+}
+
+
+
 void Scene::SetCamera(const Camera& camera) noexcept
 {
     m_camera = camera;
@@ -59,4 +66,18 @@ QVector<Sphere>& Scene::GetObjects() noexcept
 const QVector<Sphere>& Scene::GetObjects() const noexcept
 {
     return m_objects;
+}
+
+
+
+QVector<LightPoint>& Scene::GetLightPoints() noexcept
+{
+    return m_lightPoints;
+}
+
+
+
+const QVector<LightPoint>& Scene::GetLightPoints() const noexcept
+{
+    return m_lightPoints;
 }

@@ -3,12 +3,14 @@
 QVector3D Renderer::CastRay(const Ray& ray, const Scene& scene) noexcept
 {
     const QVector<Sphere> sceneObjects = scene.GetObjects();
+    const QVector<LightPoint> sceneLightPoints = scene.GetLightPoints();
     const qint32 sceneObjectsAmount = sceneObjects.size();
+    const qint32 sceneLightPointsAmount = sceneLightPoints.size();
     const float farClipPlaneDistance = scene.GetCamera().GetFarClipPlaneDistance();
 
     Material resultMaterial(scene.GetBackgroundColor());
-    QVector3D normal;
     float minIntersectionDistance = -1;
+    qint32 intersectedObjectIndex = -1;
     bool wasAnyIntersection = false;
 
     for (qint32 i = 0; i < sceneObjectsAmount; ++i)
@@ -25,14 +27,38 @@ QVector3D Renderer::CastRay(const Ray& ray, const Scene& scene) noexcept
                 {
                     wasAnyIntersection = true;
                     minIntersectionDistance = distance;
-                    resultMaterial = sceneObjects[i].GetMaterial();
-                    normal = (ray.GetPointOnRay(distance) - sceneObjects[i].GetCenterPoint()).normalized();
+                    intersectedObjectIndex = i;
                 }
             }
         }
     }
 
-    return resultMaterial.GetDiffuseColor();
+    if (!wasAnyIntersection)
+    {
+        return resultMaterial.GetDiffuseColor();
+    }
+    else
+    {
+        const QVector3D intersectionPoint = ray.GetPointOnRay(minIntersectionDistance);
+        const QVector3D normal = (intersectionPoint -
+                sceneObjects[intersectedObjectIndex].GetCenterPoint()).normalized();
+
+        float diffuseLightIntensity = 0.0f;
+
+        resultMaterial = sceneObjects[intersectedObjectIndex].GetMaterial();
+
+        for (qint32 j = 0; j < sceneLightPointsAmount; ++j)
+        {
+            /* Направление от рассматриваемой точки на сфере к источнику света. */
+            const QVector3D lightDirection = (sceneLightPoints[j].GetPosition() -
+                    intersectionPoint).normalized();
+
+            diffuseLightIntensity += sceneLightPoints[j].GetIntensity() *
+                    qMax(0.0f, QVector3D::dotProduct(lightDirection, normal));
+        }
+
+        return resultMaterial.GetDiffuseColor() * diffuseLightIntensity;
+    }
 }
 
 

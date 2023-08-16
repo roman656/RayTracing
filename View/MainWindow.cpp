@@ -68,6 +68,7 @@ void MainWindow::InitializeScene() noexcept
 
     /* Стандартной камеры пока достаточно, поэтому явно не устанавливается. */
     m_scene.SetBackgroundColor(DEFAULT_BACKGROUND_COLOR);
+    m_scene.AddLightPoint(LightPoint(QVector3D(-10, 10, 10)));
     m_scene.AddSphere(Sphere(spheresSize, QVector3D(0, 0, -1.5), redMaterial));
     m_scene.AddSphere(Sphere(spheresSize, QVector3D(-0.2, 0.3, -1.5), greenMaterial));
     m_scene.AddSphere(Sphere(spheresSize, QVector3D(-1.0, 0, -3.5), blueMaterial));
