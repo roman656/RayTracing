@@ -2,13 +2,32 @@
 
 QVector3D Renderer::CastRay(const Ray& ray, const Scene& scene) noexcept
 {
+    const std::optional<QPair<qint32, float>> optionalIntersection = FindIntersection(ray, scene);
+
+    if (optionalIntersection.has_value())
+    {
+        const auto [intersectedObjectIndex, minIntersectionDistance] = optionalIntersection.value();
+        const QVector<Sphere> sceneObjects = scene.GetObjects();
+        const Material resultMaterial = sceneObjects[intersectedObjectIndex].GetMaterial();
+        const QVector3D intersectionPoint = ray.GetPointOnRay(minIntersectionDistance);
+        const QVector3D normal = (intersectionPoint -
+                sceneObjects[intersectedObjectIndex].GetCenterPoint()).normalized();
+
+        return resultMaterial.GetDiffuseColor() * CalcDiffuseLightIntensity(intersectionPoint, normal, scene);
+    }
+    else
+    {
+        return scene.GetBackgroundColor();
+    }
+}
+
+
+std::optional<QPair<qint32, float>> Renderer::FindIntersection(const Ray& ray, const Scene& scene) noexcept
+{
     const QVector<Sphere> sceneObjects = scene.GetObjects();
-    const QVector<LightPoint> sceneLightPoints = scene.GetLightPoints();
     const qint32 sceneObjectsAmount = sceneObjects.size();
-    const qint32 sceneLightPointsAmount = sceneLightPoints.size();
     const float farClipPlaneDistance = scene.GetCamera().GetFarClipPlaneDistance();
 
-    Material resultMaterial(scene.GetBackgroundColor());
     float minIntersectionDistance = -1;
     qint32 intersectedObjectIndex = -1;
     bool wasAnyIntersection = false;
@@ -35,30 +54,35 @@ QVector3D Renderer::CastRay(const Ray& ray, const Scene& scene) noexcept
 
     if (!wasAnyIntersection)
     {
-        return resultMaterial.GetDiffuseColor();
+        return std::nullopt;
     }
     else
     {
-        const QVector3D intersectionPoint = ray.GetPointOnRay(minIntersectionDistance);
-        const QVector3D normal = (intersectionPoint -
-                sceneObjects[intersectedObjectIndex].GetCenterPoint()).normalized();
-
-        float diffuseLightIntensity = 0.0f;
-
-        resultMaterial = sceneObjects[intersectedObjectIndex].GetMaterial();
-
-        for (qint32 j = 0; j < sceneLightPointsAmount; ++j)
-        {
-            /* Направление от рассматриваемой точки на сфере к источнику света. */
-            const QVector3D lightDirection = (sceneLightPoints[j].GetPosition() -
-                    intersectionPoint).normalized();
-
-            diffuseLightIntensity += sceneLightPoints[j].GetIntensity() *
-                    qMax(0.0f, QVector3D::dotProduct(lightDirection, normal));
-        }
-
-        return resultMaterial.GetDiffuseColor() * diffuseLightIntensity;
+        return QPair<qint32, float>(intersectedObjectIndex, minIntersectionDistance);
     }
+}
+
+
+
+float Renderer::CalcDiffuseLightIntensity(const QVector3D& intersectionPoint,
+                                          const QVector3D& normal,
+                                          const Scene& scene) noexcept
+{
+    const QVector<LightPoint> sceneLightPoints = scene.GetLightPoints();
+    const qint32 sceneLightPointsAmount = sceneLightPoints.size();
+
+    float diffuseLightIntensity = 0.0f;
+
+    for (qint32 i = 0; i < sceneLightPointsAmount; ++i)
+    {
+        /* Направление от рассматриваемой точки на сфере к источнику света. */
+        const QVector3D lightDirection = (sceneLightPoints[i].GetPosition() - intersectionPoint).normalized();
+
+        diffuseLightIntensity += sceneLightPoints[i].GetIntensity() *
+                qMax(0.0f, QVector3D::dotProduct(lightDirection, normal));
+    }
+
+    return diffuseLightIntensity;
 }
 
 
