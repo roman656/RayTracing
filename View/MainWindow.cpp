@@ -61,14 +61,14 @@ MainWindow::MainWindow(QWidget* parent) noexcept : QMainWindow(parent)
 void MainWindow::InitializeScene() noexcept
 {
     const float spheresSize = 0.3f;
-    const Material redMaterial(QVector3D(255, 0, 0));    // Временное именование для различения сфер на сцене.
-    const Material greenMaterial(QVector3D(0, 255, 0));
-    const Material blueMaterial(QVector3D(0, 0, 255));
-    const Material yellowMaterial(QVector3D(255, 255, 0));
+    const Material redMaterial(QVector3D(), QVector3D(255, 0, 0));    // Временное именование для различения сфер на сцене.
+    const Material greenMaterial(QVector3D(), QVector3D(0, 255, 0));
+    const Material blueMaterial(QVector3D(), QVector3D(0, 0, 255));
+    const Material yellowMaterial(QVector3D(), QVector3D(255, 255, 0));
 
     /* Стандартной камеры пока достаточно, поэтому явно не устанавливается. */
     m_scene.SetBackgroundColor(DEFAULT_BACKGROUND_COLOR);
-    m_scene.AddLightPoint(LightPoint(QVector3D(-10, 10, 10)));
+    m_scene.AddLightPoint(LightPoint(QVector3D(-10, 10, 10), QVector3D(255, 255, 255)));
     m_scene.AddSphere(Sphere(spheresSize, QVector3D(0, 0, -1.5), redMaterial));
     m_scene.AddSphere(Sphere(spheresSize, QVector3D(-0.2, 0.3, -1.5), greenMaterial));
     m_scene.AddSphere(Sphere(spheresSize, QVector3D(-1.0, 0, -3.5), blueMaterial));
