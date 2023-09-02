@@ -6,22 +6,16 @@
 class LightPoint final
 {
 public:
-    explicit LightPoint(const QVector3D& position = QVector3D(),
-                        const QVector3D& color = QVector3D(1.0f, 1.0f, 1.0f),
-                        float intensity = 1.0f) noexcept;
+    explicit LightPoint(const QVector3D& position = QVector3D(), float intensity = 1.0f) noexcept;
 
     QVector3D GetPosition() const noexcept;
     void SetPosition(const QVector3D& position) noexcept;
-
-    QVector3D GetColor() const noexcept;
-    void SetColor(const QVector3D& color) noexcept;
 
     float GetIntensity() const noexcept;
     void SetIntensity(float intensity) noexcept;
 
 private:
     QVector3D m_position;
-    QVector3D m_color;
     float m_intensity;
 };
 
