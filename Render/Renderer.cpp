@@ -87,6 +87,28 @@ float Renderer::CalcDiffuseLightIntensity(const QVector3D& intersectionPoint,
 
 
 
+float Renderer::CalcSpecularLightIntensity(const QVector3D& intersectionPoint,
+                                           const QVector3D& normal,
+                                           const Scene& scene) noexcept
+{
+    const QVector<LightPoint> sceneLightPoints = scene.GetLightPoints();
+    const qint32 sceneLightPointsAmount = sceneLightPoints.size();
+
+    float specularLightIntensity = 0.0f;
+
+    for (qint32 i = 0; i < sceneLightPointsAmount; ++i)
+    {
+        /* Направление от рассматриваемой точки на сфере к источнику света. */
+        const QVector3D lightDirection = (sceneLightPoints[i].GetPosition() - intersectionPoint).normalized();
+
+        //specularLightIntensity += sceneLightPoints[i].GetIntensity() * qPow(qMax(0.0f, QVector3D::dotProduct(reflect(-lightDirection, normal)*dir)), material.GetSpecularExponent());
+    }
+
+    return specularLightIntensity;
+}
+
+
+
 void Renderer::Render(const Scene& scene, FrameBuffer& frameBuffer) noexcept
 {
     const qint32 width = frameBuffer.GetWidth();

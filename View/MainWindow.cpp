@@ -24,8 +24,10 @@ MainWindow::MainWindow(QWidget* parent) noexcept : QMainWindow(parent)
     m_saveButton->setStyleSheet(QStringLiteral("background-color: green;"));
     m_saveButton->setEnabled(false);
 
+    QPixmap startImagePixmap(DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT);
+    startImagePixmap.fill(Qt::black);
     m_imageLabel = new QLabel(this);
-    m_imageLabel->setPixmap(QPixmap(DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT));
+    m_imageLabel->setPixmap(startImagePixmap);
 
     connect(m_saveButton, &QPushButton::clicked, this, &MainWindow::SaveImage);
     connect(m_startButton, &QPushButton::clicked, this, [this]
@@ -61,10 +63,10 @@ MainWindow::MainWindow(QWidget* parent) noexcept : QMainWindow(parent)
 void MainWindow::InitializeScene() noexcept
 {
     const float spheresSize = 0.3f;
-    const Material redMaterial(QVector3D(255, 0, 0));    // Временное именование для различения сфер на сцене.
-    const Material greenMaterial(QVector3D(0, 255, 0));
-    const Material blueMaterial(QVector3D(0, 0, 255));
-    const Material yellowMaterial(QVector3D(255, 255, 0));
+    const Material redMaterial(QVector2D(1, 0), QVector3D(255, 0, 0), 0.0f);    // Временное именование для различения сфер на сцене.
+    const Material greenMaterial(QVector2D(1, 0), QVector3D(0, 255, 0), 0.0f);
+    const Material blueMaterial(QVector2D(1, 0), QVector3D(0, 0, 255), 0.0f);
+    const Material yellowMaterial(QVector2D(1, 0), QVector3D(255, 255, 0), 0.0f);
 
     /* Стандартной камеры пока достаточно, поэтому явно не устанавливается. */
     m_scene.SetBackgroundColor(DEFAULT_BACKGROUND_COLOR);

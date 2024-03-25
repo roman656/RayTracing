@@ -1,14 +1,13 @@
 #include <QApplication>
 
 #include "View/MainWindow.hpp"
-#include "Config.hpp"
 
 int main(int argc, char* argv[])
 {
     QApplication application(argc, argv);
-    MainWindow mainWindow;
+    QApplication::setFont(QFont(QStringLiteral("Roboto"), 16));
 
-    QApplication::setFont(MAIN_FONT);
+    MainWindow mainWindow;
 
     mainWindow.show();
 

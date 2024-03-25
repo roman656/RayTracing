@@ -11,6 +11,13 @@ Sphere::Sphere(float radius, const QVector3D& centerPoint, const Material& mater
 
 
 
+QVector3D Sphere::Reflect(const QVector3D& I, const QVector3D& normal) const noexcept
+{
+    return I - 2.0f * I * normal * normal;
+}
+
+
+
 std::optional<float> Sphere::CalcIntersectionDistance(const Ray& ray) const noexcept
 {
     const QVector3D rayDirection = ray.GetDirection();

@@ -14,6 +14,7 @@ public:
                     const Material& material = Material()) noexcept;
 
     std::optional<float> CalcIntersectionDistance(const Ray& ray) const noexcept;
+    QVector3D Reflect(const QVector3D& I, const QVector3D& normal) const noexcept;
 
     float GetRadius() const noexcept;
     void SetRadius(float radius) noexcept;

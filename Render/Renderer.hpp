@@ -15,6 +15,9 @@ private:
     static float CalcDiffuseLightIntensity(const QVector3D& intersectionPoint,
                                            const QVector3D& normal,
                                            const Scene& scene) noexcept;
+    static float CalcSpecularLightIntensity(const QVector3D& intersectionPoint,
+                                            const QVector3D& normal,
+                                            const Scene& scene) noexcept;
 };
 
 #endif // RENDERER_HPP
